@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Public Transport Grievance – Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Inline CSS for login page -->
+  <style>
+    * , *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg-beige:#f6ebdd;
+      --card-bg:#ffffff;
+      --border-soft:#e4ded3;
+      --text-main:#1f2933;
+      --text-muted:#6b7280;
+      --primary:#e53935;
+      --radius-lg:26px;
+      --shadow-soft:0 18px 40px rgba(15,23,42,0.12);
+      --font-main:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    body {
+      margin:0;
+      min-height:100vh;
+      background:var(--bg-beige);
+      font-family:var(--font-main);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    /* Admin toggle – top-right */
+    .auth-toggle-bar{
+      position:fixed;
+      top:18px;
+      right:24px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--text-muted);
+    }
+    .toggle-switch{position:relative;width:46px;height:24px;}
+    .toggle-switch input{opacity:0;width:0;height:0;}
+    .slider{
+      position:absolute;inset:0;border-radius:999px;
+      background:#e5e7eb;cursor:pointer;transition:.3s;
+    }
+    .slider::before{
+      content:"";position:absolute;
+      width:18px;height:18px;left:4px;top:3px;
+      border-radius:50%;background:#fff;
+      box-shadow:0 1px 3px rgba(0,0,0,.3);
+      transition:.3s;
+    }
+    .toggle-switch input:checked + .slider{background:#f97316;}
+    .toggle-switch input:checked + .slider::before{transform:translateX(18px);}
+
+    /* Center card */
+    .auth-wrapper{max-width:420px;width:100%;}
+    .auth-card{
+      background:var(--card-bg);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow-soft);
+      border:1px solid var(--border-soft);
+      padding:28px 30px 26px;
+    }
+
+    /* Top logo + heading INSIDE card */
+    .auth-header{
+      text-align:center;
+      margin-bottom:18px;
+    }
+    .logo-circle{
+      width:64px;height:64px;border-radius:999px;
+      margin:0 auto 10px;
+      background:var(--primary);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 10px 25px rgba(229,57,53,.4);
+    }
+    .logo-circle span{
+      font-size:26px;
+      color:#fff;
+    }
+    .auth-title{
+      margin:0;
+      font-size:18px;
+      font-weight:600;
+      color:var(--text-main);
+    }
+    .auth-subtitle{
+      margin:4px 0 0;
+      font-size:13px;
+      color:var(--text-muted);
+    }
+
+    .user-text{} 
+    .admin-text{display:none;}
+    .auth-card.admin-mode .user-text{display:none;}
+    .auth-card.admin-mode .admin-text{display:block;}
+
+    /* Forms */
+    .auth-forms{margin-top:4px;}
+    .form{display:none;}
+    .form.active{display:block;}
+    .form-title{margin:0 0 16px;font-size:18px;}
+    .form-field{
+      display:flex;flex-direction:column;gap:6px;
+      margin-bottom:12px;font-size:13px;
+    }
+    .form-field label{color:var(--text-muted);}
+    .form-field input{
+      border-radius:10px;border:1px solid #d4d4d8;
+      padding:8px 10px;font-size:14px;background:#fff;outline:none;
+    }
+
+    .form-footer-row{
+      display:flex;justify-content:space-between;align-items:center;
+      margin:4px 0 14px;font-size:12px;
+    }
+    .checkbox-inline{display:flex;align-items:center;gap:6px;font-size:12px;}
+    .link-muted{text-decoration:none;color:#6b7280;font-size:12px;}
+
+    .btn-primary{
+      border:none;border-radius:999px;
+      padding:9px 20px;font-size:14px;font-weight:500;
+      background:var(--primary);color:#fff;
+      cursor:pointer;box-shadow:0 10px 25px rgba(229,57,53,.4);
+      width:100%;
+    }
+
+    .form-footnote{
+      margin-top:10px;
+      font-size:13px;
+      color:var(--text-muted);
+      text-align:center;
+    }
+    .form-footnote.small{font-size:12px;}
+    .link-button{
+      border:none;background:none;padding:0;margin:0;
+      color:#e11d48;cursor:pointer;font-size:13px;
+    }
+
+    @media (max-width:500px){
+      body{padding:12px;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin toggle -->
+  <div class="auth-toggle-bar">
+    <label class="toggle-switch">
+      <input type="checkbox" id="adminToggle" />
+      <span class="slider"></span>
+    </label>
+    <span>Admin login</span>
+  </div>
+
+  <main class="auth-wrapper">
+    <section class="auth-card" id="authCard">
+      <!--TOP: BUS ICON + HEADING -->
+      <div class="auth-header">
+        <div class="logo-circle">
+          <!-- you can swap 🚌 with an SVG later -->
+          <span>🚌</span>
+        </div>
+        <h2 class="auth-title user-text">Public Transport Grievance System</h2>
+        <h2 class="auth-title admin-text">Administrator Portal</h2>
+        <p class="auth-subtitle user-text">
+          Sign in or create an account to submit and manage transport complaints.
+        </p>
+        <p class="auth-subtitle admin-text">
+          Admin login to manage grievances and system.
+        </p>
+      </div>
+
+      <!-- 🔻 BELOW: FORMS -->
+      <div class="auth-forms">
+        <!-- USER LOGIN -->
+        <form id="userLoginForm" class="form active">
+          <h3 class="form-title">User Login</h3>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" id="userLoginEmail" placeholder="name@example.com" required />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="userLoginPassword" placeholder="••••••••" required />
+          </div>
+          <div class="form-footer-row">
+            <label class="checkbox-inline">
+              <input type="checkbox" /> Remember me
+            </label>
+            <a href="#" class="link-muted">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-primary">Login</button>
+          <p class="form-footnote">
+            Don't have an account?
+            <button type="button" class="link-button" id="showSignup">Sign up</button>
+          </p>
+        </form>
+
+        <!-- USER SIGNUP -->
+        <form id="userSignupForm" class="form">
+          <h3 class="form-title">Create Account</h3>
+
+          <div class="form-field">
+            <label>Full Name</label>
+            <input type="text" id="signupName" placeholder="Full name" required />
+          </div>
+          <div class="form-field">
+            <label>Phone Number</label>
+            <input type="tel" id="signupPhone" placeholder="9876543210" required />
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" id="signupEmail" placeholder="name@example.com" required />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="signupPassword" placeholder="••••••••" required />
+          </div>
+          <div class="form-field">
+            <label>Confirm Password</label>
+            <input type="password" id="signupConfirm" placeholder="••••••••" required />
+          </div>
+
+          <button type="submit" class="btn-primary">Sign up</button>
+          <p class="form-footnote">
+            Already have an account?
+            <button type="button" class="link-button" id="showLogin">Login</button>
+          </p>
+        </form>
+
+        <!-- ADMIN LOGIN -->
+        <form id="adminLoginForm" class="form">
+          <h3 class="form-title">Admin Login</h3>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@pt.local" required />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="••••••••" required />
+          </div>
+          <div class="form-footer-row">
+            <span></span>
+            <span class="link-muted">Admin access only</span>
+          </div>
+          <button type="submit" class="btn-primary">Login</button>
+          <p class="form-footnote small">
+            Contact system administrator for admin credentials.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+<script>
+  // Helper: store current user in browser (for dashboards)
+  function setCurrentUser(user) {
+    localStorage.setItem("currentUser", JSON.stringify(user));
+  }
+
+  function setActiveForm(active, others) {
+    active.classList.add("active");
+    (others || []).forEach(f => f.classList.remove("active"));
+  }
+
+  (function () {
+    const card = document.getElementById("authCard");
+    const adminToggle = document.getElementById("adminToggle");
+
+    const userLoginForm = document.getElementById("userLoginForm");
+    const userSignupForm = document.getElementById("userSignupForm");
+    const adminLoginForm = document.getElementById("adminLoginForm");
+
+    const showSignupBtn = document.getElementById("showSignup");
+    const showLoginBtn = document.getElementById("showLogin");
+
+    // default form
+    setActiveForm(userLoginForm, [userSignupForm, adminLoginForm]);
+
+    // toggle User / Admin mode
+    adminToggle.addEventListener("change", () => {
+      const isAdmin = adminToggle.checked;
+      card.classList.toggle("admin-mode", isAdmin);
+      if (isAdmin) {
+        setActiveForm(adminLoginForm, [userLoginForm, userSignupForm]);
+      } else {
+        setActiveForm(userLoginForm, [userSignupForm, adminLoginForm]);
+      }
+    });
+
+    // user: switch login/signup
+    showSignupBtn.addEventListener("click", () => {
+      setActiveForm(userSignupForm, [userLoginForm]);
+    });
+    showLoginBtn.addEventListener("click", () => {
+      setActiveForm(userLoginForm, [userSignupForm]);
+    });
+
+    // ========== USER SIGNUP ==========
+    userSignupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("signupName").value.trim();
+      const phone = document.getElementById("signupPhone").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value.trim();
+      const confirm = document.getElementById("signupConfirm").value.trim();
+
+      if (password !== confirm) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(data.message || "Signup failed. Please try again.");
+          return;
+        }
+
+        setCurrentUser({
+          role: data.role,
+          name: data.name,
+          email: data.email,
+        });
+
+        window.location.href = "user-dashboard.html";
+      } catch (err) {
+        console.error(err);
+        alert("Cannot connect to server. Please check if backend is running.");
+      }
+    });
+
+    // ========== USER LOGIN ==========
+    userLoginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("userLoginEmail").value.trim();
+      const password = document.getElementById("userLoginPassword").value.trim();
+
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(data.message || "Invalid email or password.");
+          return;
+        }
+
+        setCurrentUser({
+          role: data.role,
+          name: data.name,
+          email: data.email,
+        });
+
+        window.location.href = "user-dashboard.html";
+      } catch (err) {
+        console.error(err);
+        alert("Cannot connect to server. Please check if backend is running.");
+      }
+    });
+
+    // ========== ADMIN LOGIN ==========
+    adminLoginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value.trim();
+
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(data.message || "Invalid admin credentials.");
+          return;
+        }
+
+        setCurrentUser({
+          role: data.role,
+          name: data.name,
+          email: data.email,
+        });
+
+        window.location.href = "admin-dashboard.html";
+      } catch (err) {
+        console.error(err);
+        alert("Cannot connect to server. Please check if backend is running.");
+      }
+    });
+  })();
+</script>
+</body>
+</html>

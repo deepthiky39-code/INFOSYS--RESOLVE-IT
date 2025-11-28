@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard – Public Transport Grievance System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- keep your project styles if needed -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    * , *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg-beige: #f6ebdd;
+      --card-bg: #ffffff;
+      --border-soft: #e4ded3;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --primary: #e53935;
+      --radius-lg: 18px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+    body {
+      margin: 0;
+      background: var(--bg-beige);
+      font-family: var(--font-main);
+      color: var(--text-main);
+    }
+    .admin-page {
+      min-height: 100vh;
+      padding: 24px 40px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* top header */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .admin-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .admin-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      box-shadow: 0 10px 25px rgba(229, 57, 53, 0.45);
+    }
+    .admin-title-block h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .admin-title-block p {
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .admin-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .admin-email {
+      color: var(--text-muted);
+    }
+    .btn-outline {
+      border-radius: 999px;
+      padding: 7px 16px;
+      border: 1px solid #e11d48;
+      background: #fff;
+      color: #e11d48;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* main layout: column */
+    .admin-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* summary row on top */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-soft);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .summary-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-title {
+      font-size: 13px;
+      color: #4b5563;
+      margin: 0;
+    }
+    .summary-badge {
+      margin-left: auto;
+      font-size: 18px;
+    }
+    .summary-count {
+      font-size: 24px;
+      margin: 0;
+      font-weight: 700;
+    }
+    .summary-foot {
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 0;
+    }
+    .summary-card.total { border-left: 4px solid #dc2626; }
+    .summary-card.bus   { border-left: 4px solid #f97316; }
+    .summary-card.train { border-left: 4px solid #3b82f6; }
+    .summary-card.metro { border-left: 4px solid #22c55e; }
+
+    /* complaints panel full width below */
+    .panel {
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-soft);
+      padding: 20px 24px 18px;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .panel-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .panel-header p {
+      margin: 3px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .filter-chips {
+      display: inline-flex;
+      background: #f3f4f6;
+      border-radius: 999px;
+      padding: 3px;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .chip {
+      border-radius: 999px;
+      border: none;
+      padding: 4px 10px;
+      background: transparent;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    .chip.active {
+      background: #fff;
+      color: #111827;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+    }
+
+    .complaints-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .complaint-card {
+      background: #fbfbfb;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+      gap: 12px;
+    }
+    .complaint-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .complaint-desc {
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 6px;
+    }
+    .complaint-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .meta-icon {
+      font-size: 13px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .status-open {
+      background: #fff7ed;
+      color: #c05621;
+    }
+    .status-in-progress {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .status-resolved {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .complaint-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      justify-content: center;
+    }
+    .status-select {
+      width: 100%;
+      max-width: 180px;
+      border-radius: 999px;
+      border: 1px solid #d4d4d8;
+      padding: 6px 10px;
+      font-size: 12px;
+      background: #f9fafb;
+    }
+    .btn-update {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      background: #111827;
+      color: #fff;
+    }
+    .empty-text {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 960px) {
+      .admin-page { padding: 18px 16px 24px; }
+      .summary-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .complaint-card { grid-template-columns: 1fr; }
+      .complaint-actions { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page">
+    <!-- header -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div class="admin-icon-circle">🛡</div>
+        <div class="admin-title-block">
+          <h1>Admin Dashboard</h1>
+          <p>Public Transport Grievance Management</p>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <span class="admin-email" id="adminEmailDisplay"></span>
+        <button class="btn-outline" id="logoutBtnAdmin">Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <!-- TOP: summary boxes -->
+      <section class="summary-row">
+        <article class="summary-card total">
+          <div class="summary-header">
+            <h3 class="summary-title">Total Complaints</h3>
+            <span class="summary-badge">📋</span>
+          </div>
+          <p class="summary-count" id="totalCount">0</p>
+          <p class="summary-foot">All submitted complaints</p>
+        </article>
+
+        <article class="summary-card bus">
+          <div class="summary-header">
+            <h3 class="summary-title">Bus Complaints</h3>
+            <span class="summary-badge">🚌</span>
+          </div>
+          <p class="summary-count" id="busCount">0</p>
+          <p class="summary-foot">Issues reported in buses</p>
+        </article>
+
+        <article class="summary-card train">
+          <div class="summary-header">
+            <h3 class="summary-title">Train Complaints</h3>
+            <span class="summary-badge">🚆</span>
+          </div>
+          <p class="summary-count" id="trainCount">0</p>
+          <p class="summary-foot">Issues reported in trains</p>
+        </article>
+
+        <article class="summary-card metro">
+          <div class="summary-header">
+            <h3 class="summary-title">Metro Complaints</h3>
+            <span class="summary-badge">🚇</span>
+          </div>
+          <p class="summary-count" id="metroCount">0</p>
+          <p class="summary-foot">Issues reported in metro</p>
+        </article>
+      </section>
+
+      <!-- BOTTOM: complaints panel -->
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>All Complaints</h2>
+            <p>View and manage all public transport complaints.</p>
+          </div>
+          <div class="filter-chips">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="Bus">Bus</button>
+            <button class="chip" data-filter="Train">Train</button>
+            <button class="chip" data-filter="Metro">Metro</button>
+          </div>
+        </div>
+
+        <div class="complaints-list" id="complaintsList">
+          <!-- filled by JS -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // ===== helpers =====
+    function getComplaints() {
+      return JSON.parse(localStorage.getItem("complaints") || "[]");
+    }
+    function saveComplaints(list) {
+      localStorage.setItem("complaints", JSON.stringify(list));
+    }
+    function getCurrentUser() {
+      const s = localStorage.getItem("currentUser");
+      return s ? JSON.parse(s) : null;
+    }
+    function clearCurrentUser() {
+      localStorage.removeItem("currentUser");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const admin = getCurrentUser();
+      if (!admin || admin.role !== "admin") {
+        window.location.href = "index.html";
+        return;
+      }
+
+      document.getElementById("adminEmailDisplay").textContent = admin.email;
+
+      document.getElementById("logoutBtnAdmin").addEventListener("click", () => {
+        clearCurrentUser();
+        window.location.href = "index.html";
+      });
+
+      const chips = document.querySelectorAll(".chip");
+      let currentFilter = "all";
+
+      chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          chips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentFilter = chip.dataset.filter;
+          renderComplaints();
+        });
+      });
+
+      function renderComplaints() {
+        const listEl = document.getElementById("complaintsList");
+        listEl.innerHTML = "";
+
+        const all = getComplaints();
+
+        // summary counts
+        document.getElementById("totalCount").textContent = all.length;
+        document.getElementById("busCount").textContent =
+          all.filter(c => c.transportType === "Bus").length;
+        document.getElementById("trainCount").textContent =
+          all.filter(c => c.transportType === "Train").length;
+        document.getElementById("metroCount").textContent =
+          all.filter(c => c.transportType === "Metro").length;
+
+        // filter by chip
+        let toShow = all.slice();
+        if (currentFilter !== "all") {
+          toShow = toShow.filter(c => c.transportType === currentFilter);
+        }
+
+        if (toShow.length === 0) {
+          const p = document.createElement("p");
+          p.className = "empty-text";
+          p.textContent = "No complaints found for the selected filter.";
+          listEl.appendChild(p);
+          return;
+        }
+
+        toShow.forEach(c => {
+          const card = document.createElement("article");
+          card.className = "complaint-card";
+
+          // left
+          const left = document.createElement("div");
+          const title = document.createElement("div");
+          title.className = "complaint-title";
+          title.textContent = c.title;
+
+          const desc = document.createElement("div");
+          desc.className = "complaint-desc";
+          desc.textContent = c.description || "";
+
+          const metaRow = document.createElement("div");
+          metaRow.className = "complaint-meta-row";
+
+          const metaType = document.createElement("div");
+          metaType.className = "meta-item";
+          metaType.innerHTML =
+            '<span class="meta-icon">🚍</span><span>' +
+            (c.transportType || "—") +
+            "</span>";
+
+          const metaRoute = document.createElement("div");
+          metaRoute.className = "meta-item";
+          metaRoute.innerHTML =
+            '<span class="meta-icon">📍</span><span>' +
+            (c.route || "Route not specified") +
+            "</span>";
+
+          const metaDate = document.createElement("div");
+          metaDate.className = "meta-item";
+          metaDate.innerHTML =
+            '<span class="meta-icon">📅</span><span>' +
+            (c.date || "") +
+            "</span>";
+
+          const metaUser = document.createElement("div");
+          metaUser.className = "meta-item";
+          metaUser.innerHTML =
+            '<span class="meta-icon">👤</span><span>' +
+            (c.userEmail || "") +
+            "</span>";
+
+          metaRow.append(metaType, metaRoute, metaDate, metaUser);
+
+          const pill = document.createElement("div");
+          pill.className = "status-pill";
+          if (c.status === "Resolved") pill.classList.add("status-resolved");
+          else if (c.status === "In Progress") pill.classList.add("status-in-progress");
+          else pill.classList.add("status-open");
+          pill.textContent = c.status || "Open";
+
+          left.append(title, desc, metaRow, pill);
+
+          // right actions
+          const right = document.createElement("div");
+          right.className = "complaint-actions";
+
+          const select = document.createElement("select");
+          select.className = "status-select";
+          ["Open", "In Progress", "Resolved"].forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (s === c.status) opt.selected = true;
+            select.appendChild(opt);
+          });
+
+          const btn = document.createElement("button");
+          btn.className = "btn-update";
+          btn.textContent = "Update Status";
+
+          btn.addEventListener("click", () => {
+            const allComplaints = getComplaints();
+            const idx = allComplaints.findIndex(x => x.id === c.id);
+            if (idx !== -1) {
+              allComplaints[idx].status = select.value;
+              saveComplaints(allComplaints);
+              renderComplaints();
+            }
+          });
+
+          right.append(select, btn);
+
+          card.append(left, right);
+          listEl.appendChild(card);
+        });
+      }
+
+      renderComplaints();
+    });
+  </script>
+</body>
+</html>
