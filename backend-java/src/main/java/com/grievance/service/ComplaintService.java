@@ -114,7 +114,7 @@ public List<ComplaintResponse> getComplaintsForAdmin(String adminEmail) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return complaintRepository.findByUser(user)
+        return complaintRepository.findByUserOrderBySubmittedAtDesc(user)
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -123,11 +123,12 @@ public List<ComplaintResponse> getComplaintsForAdmin(String adminEmail) {
     /* ================= ADMIN ================= */
 
     public List<ComplaintResponse> getAllComplaints() {
-        return complaintRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
+    return complaintRepository.findAllByOrderBySubmittedAtDesc()
+            .stream()
+            .map(this::mapToResponse)
+            .toList();
+}
+
 
     public List<ComplaintResponse> getComplaintsByTransportType(String type) {
         return complaintRepository.findByTransportType(type)

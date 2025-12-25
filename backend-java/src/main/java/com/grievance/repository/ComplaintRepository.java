@@ -16,6 +16,7 @@ List<Complaint> findByUser(User user);
 
     // ================= USER =================
     List<Complaint> findByUserOrderBySubmittedAtDesc(User user);
+List<Complaint> findAllByOrderBySubmittedAtDesc();
 
     // ================= FILTERS =================
     List<Complaint> findByTransportType(String transportType);
