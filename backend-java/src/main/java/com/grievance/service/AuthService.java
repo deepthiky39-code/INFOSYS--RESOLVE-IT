@@ -103,7 +103,7 @@ public String forgotPassword(String email) {
     emailService.sendEmail(
             user.getEmail(),
             "Password Reset Request",
-            "RESET LINK: http://localhost:5173/reset-password?token=" + token
+"RESET LINK: https://https://infosys-resolve-it.vercel.app/reset-password?token=" + token
     );
 
     System.out.println("🔥 Returned from EmailService");

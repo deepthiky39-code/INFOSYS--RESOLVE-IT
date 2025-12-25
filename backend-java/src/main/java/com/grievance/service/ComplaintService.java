@@ -167,7 +167,8 @@ public List<ComplaintResponse> getComplaintsForAdmin(String adminEmail) {
         List<String> photoUrls = complaintPhotoRepository
                 .findByComplaintId(complaint.getId())
                 .stream()
-                .map(photo -> "http://localhost:8080/" + photo.getFilePath())
+                .map(photo -> "https://noble-adventure-production.up.railway.app"
+ + photo.getFilePath())
                 .collect(Collectors.toList());
 
         ComplaintResponse response = new ComplaintResponse();

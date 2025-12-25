@@ -31,7 +31,7 @@ export function UserProfile() {
   const fetchProfile = async () => {
     if (!token) return;
 
-    const res = await fetch("http://localhost:8080/api/users/profile", {
+    const res = await fetch("http://noble-adventure-production.up.railway.app/api/users/profile", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -67,7 +67,7 @@ export function UserProfile() {
       payload.password = profile.password;
     }
 
-    const res = await fetch("http://localhost:8080/api/users/profile", {
+    const res = await fetch("http://noble-adventure-production.up.railway.app/api/users/profile", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -29,7 +29,7 @@ export function AdminFeedback({ adminDepartment }: AdminFeedbackProps) {
       localStorage.getItem("accessToken");
 
     const res = await fetch(
-      "http://localhost:8080/api/feedback/admin",
+      "http://:8080noble-adventure-production.up.railway.app/api/feedback/admin",
       {
         headers: {
           Authorization: `Bearer ${token}`,

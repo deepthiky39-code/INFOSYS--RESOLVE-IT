@@ -59,7 +59,7 @@ export function AdminDashboard({ user, onLogout }: AdminDashboardProps) {
   const fetchAllComplaints = async () => {
     if (!token) return;
 
-    const res = await fetch("http://localhost:8080/api/admin/complaints", {
+    const res = await fetch("http://noble-adventure-production.up.railway.app/api/admin/complaints", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

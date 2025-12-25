@@ -33,8 +33,8 @@ export function LoginForm({
   // ✅ ADDED: login API
   const loginUser = async () => {
     const endpoint = isAdminMode
-      ? "http://localhost:8080/api/auth/admin/login"
-      : "http://localhost:8080/api/auth/login";
+      ? "http://noble-adventure-production.up.railway.app/api/auth/admin/login"
+      : "http://noble-adventure-production.up.railway.app/api/auth/login";
 
     const res = await fetch(endpoint, {
       method: "POST",

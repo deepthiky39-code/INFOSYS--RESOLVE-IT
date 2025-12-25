@@ -37,7 +37,7 @@ export function ResetPassword() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8080/api/auth/reset-password?token=${token}&newPassword=${password}`,
+        `http://noble-adventure-production.up.railway.app/api/auth/reset-password?token=${token}&newPassword=${password}`,
         {
           method: "POST",
         }

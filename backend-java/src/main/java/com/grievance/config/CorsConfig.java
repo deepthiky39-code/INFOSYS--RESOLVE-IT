@@ -17,7 +17,8 @@ public class CorsConfig {
 
         // 🔴 IMPORTANT: explicit frontend origin
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
+                List.of("https://noble-adventure-production.up.railway.app"
+)
         );
 
         configuration.setAllowedMethods(

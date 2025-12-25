@@ -81,7 +81,7 @@ export function ComplaintForm({ onSuccess }: ComplaintFormProps) {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/complaints", {
+      const res = await fetch("http://noble-adventure-production.up.railway.app/api/complaints", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

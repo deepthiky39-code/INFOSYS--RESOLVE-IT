@@ -96,14 +96,16 @@ export function AdminComplaintList({
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/complaints/${complaintId}/status?status=${backendStatus}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  `https://noble-adventure-production.up.railway.app/api/admin/complaints/${complaintId}/status?status=${backendStatus}`,
+  {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }
+);
+
 
       if (!res.ok) throw new Error();
 
