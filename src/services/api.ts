@@ -150,8 +150,9 @@ export const complaintAPI = {
   },
 
 getPhotoUrl: (fileName: string) => {
-  return `${BACKEND_BASE_URL}/uploads/complaints/${fileName}`;
+  return `https://noble-adventure-production.up.railway.app/api/complaints/photos/${fileName}`;
 },
+
 
 };
 
