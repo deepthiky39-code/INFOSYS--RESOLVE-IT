@@ -27,7 +27,7 @@ public class FileStorageService {
             Files.copy(file.getInputStream(), filePath);
 
             // path stored in DB
-            return "uploads/complaints/" + fileName;
+            return  fileName;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);
