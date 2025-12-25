@@ -1,6 +1,7 @@
 // API Service for connecting to Java Spring Boot backend
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL + "/api";
+const BACKEND_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Helper function to get token from localStorage
 const getToken = (): string | null => {
@@ -149,8 +150,9 @@ export const complaintAPI = {
   },
 
 getPhotoUrl: (fileName: string) => {
-  return `https://noble-adventure-production.up.railway.app/uploads/complaints/${fileName}`;
-}, 
+  return `${BACKEND_BASE_URL}/uploads/complaints/${fileName}`;
+},
+
 };
 
 // Admin API
