@@ -166,11 +166,13 @@ public List<ComplaintResponse> getComplaintsForAdmin(String adminEmail) {
     private ComplaintResponse mapToResponse(Complaint complaint) {
 
         List<String> photoUrls = complaintPhotoRepository
-                .findByComplaintId(complaint.getId())
-                .stream()
-                .map(photo -> "https://noble-adventure-production.up.railway.app"
- + photo.getFilePath())
-                .collect(Collectors.toList());
+        .findByComplaintId(complaint.getId())
+        .stream()
+        .map(photo ->
+            "https://noble-adventure-production.up.railway.app/uploads/complaints/"
+            + photo.getFilePath())
+        .toList();
+
 
         ComplaintResponse response = new ComplaintResponse();
         response.setId(complaint.getId());
