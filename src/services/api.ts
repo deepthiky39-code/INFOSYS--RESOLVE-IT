@@ -149,7 +149,7 @@ export const complaintAPI = {
   },
 
 getPhotoUrl: (fileName: string) => {
-  return `${import.meta.env.VITE_API_BASE_URL}/uploads/complaints/${fileName}`;
+  return `https://noble-adventure-production.up.railway.app/uploads/complaints/${fileName}`;
 },
 };
 
