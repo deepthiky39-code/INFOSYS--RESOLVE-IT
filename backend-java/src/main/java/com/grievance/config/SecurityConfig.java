@@ -36,6 +36,30 @@ public PasswordEncoder passwordEncoder() {
         return authConfig.getAuthenticationManager();
     }
 
+@Bean
+public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+
+    org.springframework.web.cors.CorsConfiguration config =
+            new org.springframework.web.cors.CorsConfiguration();
+
+    config.setAllowedOrigins(
+            java.util.List.of(
+                "https://infosys-resolve-it.vercel.app",          // your frontend
+                "https://noble-adventure-production.up.railway.app" // backend
+            )
+    );
+
+    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedHeaders(java.util.List.of("*"));
+    config.setExposedHeaders(java.util.List.of("Authorization"));
+    config.setAllowCredentials(true);
+
+    org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+            new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+
+    source.registerCorsConfiguration("/**", config);
+    return source;
+}
 
 
     @Bean
