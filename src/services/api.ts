@@ -148,8 +148,8 @@ export const complaintAPI = {
     return handleResponse(response);
   },
 
-  getPhotoUrl: (fileName: string) => {
-  return import.meta.env.VITE_API_BASE_URL + `/uploads/complaints/${fileName}`;
+getPhotoUrl: (fileName: string) => {
+  return `${import.meta.env.VITE_API_BASE_URL}/uploads/complaints/${fileName}`;
 },
 };
 
