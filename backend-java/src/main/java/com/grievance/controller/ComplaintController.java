@@ -1,5 +1,4 @@
 package com.grievance.controller;
-
 import com.grievance.dto.ComplaintRequest;
 import com.grievance.dto.ComplaintResponse;
 import com.grievance.service.ComplaintService;
@@ -13,11 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/complaints")
 @CrossOrigin(origins = "*")
