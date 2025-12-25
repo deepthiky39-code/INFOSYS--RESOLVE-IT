@@ -1,6 +1,6 @@
 // API Service for connecting to Java Spring Boot backend
 
-const API_BASE_URL = 'http://noble-adventure-production.up.railway.app/api';
+const API_BASE_URL = 'https://noble-adventure-production.up.railway.app/api';
 
 // Helper function to get token from localStorage
 const getToken = (): string | null => {

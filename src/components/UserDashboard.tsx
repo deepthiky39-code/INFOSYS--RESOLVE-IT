@@ -44,7 +44,7 @@ export function UserDashboard({ user, onLogout }: UserDashboardProps) {
 
     if (!token) return;
 
-    const res = await fetch("http://noble-adventure-production.up.railway.app/api/complaints/user", {
+    const res = await fetch("https://noble-adventure-production.up.railway.app/api/complaints/user", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

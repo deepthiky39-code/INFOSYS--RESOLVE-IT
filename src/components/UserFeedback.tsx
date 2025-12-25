@@ -11,7 +11,7 @@ export function UserFeedback() {
   const token = localStorage.getItem("token");
 
   const submitFeedback = async () => {
-    const res = await fetch("http://noble-adventure-production.up.railway.app/api/feedback", {
+    const res = await fetch("https://noble-adventure-production.up.railway.app/api/feedback", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

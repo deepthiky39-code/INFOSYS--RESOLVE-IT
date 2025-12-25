@@ -53,7 +53,7 @@ export function AdminManagement() {
   // ================= FETCH ADMINS =================
   const fetchAdmins = async () => {
     try {
-      const res = await fetch("http://noble-adventure-production.up.railway.app/api/admin/list", {
+      const res = await fetch("https://noble-adventure-production.up.railway.app/api/admin/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +75,7 @@ export function AdminManagement() {
     }
 
     try {
-      await fetch("http://noble-adventure-production.up.railway.app/api/admin/create", {
+      await fetch("https://noble-adventure-production.up.railway.app/api/admin/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export function AdminManagement() {
   // ================= UPDATE STATUS =================
   const toggleAdminStatus = async (id: string) => {
     try {
-      await fetch(`http://noble-adventure-production.up.railway.app/api/admin/${id}/status`, {
+      await fetch(`https://noble-adventure-production.up.railway.app/api/admin/${id}/status`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export function AdminManagement() {
   // ================= DELETE ADMIN =================
   const handleDeleteAdmin = async (id: string) => {
     try {
-      await fetch(`http://noble-adventure-production.up.railway.app/api/admin/${id}`, {
+      await fetch(`https://noble-adventure-production.up.railway.app/api/admin/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

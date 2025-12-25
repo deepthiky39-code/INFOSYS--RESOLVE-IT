@@ -30,7 +30,7 @@ export function ComplaintFeedbackForm({
     setLoading(true);
 
     const res = await fetch(
-      `http://noble-adventure-production.up.railway.app/api/feedback/complaint/${complaintId}`,
+      `https://noble-adventure-production.up.railway.app/api/feedback/complaint/${complaintId}`,
       {
         method: "POST",
         headers: {

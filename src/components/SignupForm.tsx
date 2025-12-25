@@ -38,7 +38,7 @@ export function SignupForm({ onBackToLogin }: SignupFormProps) {
     try {
       setLoading(true);
 
-      const res = await fetch("http://noble-adventure-production.up.railway.app/api/auth/signup", {
+      const res = await fetch("https://noble-adventure-production.up.railway.app/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
