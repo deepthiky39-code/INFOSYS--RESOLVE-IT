@@ -42,14 +42,12 @@ public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSou
     org.springframework.web.cors.CorsConfiguration config =
             new org.springframework.web.cors.CorsConfiguration();
 
-    config.setAllowedOrigins(
-            java.util.List.of(
-                "https://infosys-resolve-it.vercel.app",          // your frontend
-                "https://noble-adventure-production.up.railway.app" // backend
-            )
-    );
+    config.setAllowedOriginPatterns(java.util.List.of(
+            "https://*.vercel.app",
+            "https://infosys-resolve-it.vercel.app"
+    ));
 
-    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedMethods(java.util.List.of("GET","POST","PUT","DELETE","OPTIONS"));
     config.setAllowedHeaders(java.util.List.of("*"));
     config.setExposedHeaders(java.util.List.of("Authorization"));
     config.setAllowCredentials(true);
@@ -60,6 +58,7 @@ public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSou
     source.registerCorsConfiguration("/**", config);
     return source;
 }
+
 
 
     @Bean
@@ -90,6 +89,7 @@ public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSou
                 // ===== COMPLAINTS =====
                 .requestMatchers(HttpMethod.POST, "/api/complaints/**")
 .hasAnyRole("USER", "ADMIN")
+.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
 
 
