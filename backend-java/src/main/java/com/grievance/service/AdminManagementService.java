@@ -180,4 +180,9 @@ public class AdminManagementService {
 
         return new HashMap<>(Map.of("perAdmin", result));
     }
+    public Admin getAdminByEmail(String email) {
+    return adminRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Admin not found"));
+}
+
 }

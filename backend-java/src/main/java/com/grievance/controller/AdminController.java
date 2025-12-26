@@ -133,4 +133,14 @@ public ResponseEntity<List<ComplaintResponse>> getComplaintsForAdmin(
                 adminManagementService.getAdminPerformance()
         );
     }
+    @GetMapping("/profile")
+public ResponseEntity<?> getAdminProfile(Authentication authentication) {
+
+    return ResponseEntity.ok(
+            adminManagementService.getAdminByEmail(authentication.getName())
+    );
 }
+}
+
+
+

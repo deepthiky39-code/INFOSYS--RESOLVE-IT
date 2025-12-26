@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -14,16 +14,30 @@ interface AdminProfileProps {
 }
 
 export function AdminProfile({ user }: AdminProfileProps) {
-  const [formData, setFormData] = useState({
-    name: user.name || "Admin User",
-    email: user.email,
-    phone: "+1 (555) 123-4567",
-    department: "Public Transport Authority",
-    role: "Senior Administrator",
-    employeeId: "ADM-2024-001",
-  });
-
+  const [formData, setFormData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(
+      "https://noble-adventure-production.up.railway.app/api/admin/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed");
+        return res.json();
+      })
+      .then((data) => setFormData(data))
+      .catch(() => toast.error("Failed to load profile"));
+  }, []);
+
+  if (!formData)
+    return <p className="text-center">Loading profile...</p>;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -33,7 +47,6 @@ export function AdminProfile({ user }: AdminProfileProps) {
   };
 
   const handleSave = () => {
-    // In a real app, this would save to a database
     setIsEditing(false);
     toast.success("Profile updated successfully");
   };
@@ -47,16 +60,20 @@ export function AdminProfile({ user }: AdminProfileProps) {
             View and manage your administrator account details
           </CardDescription>
         </CardHeader>
+
         <CardContent className="space-y-6">
           {/* Profile Header */}
           <div className="flex items-center gap-6 pb-6 border-b">
             <div className="bg-red-600 p-6 rounded-full">
               <User className="size-12 text-white" />
             </div>
+
             <div>
               <h2 className="text-xl">{formData.name}</h2>
               <p className="text-sm text-gray-600">{formData.role}</p>
-              <p className="text-sm text-gray-500">ID: {formData.employeeId}</p>
+              <p className="text-sm text-gray-500">
+                ID: {formData.employeeId}
+              </p>
             </div>
           </div>
 
@@ -100,9 +117,9 @@ export function AdminProfile({ user }: AdminProfileProps) {
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
                   <Input
                     id="phone"
-                    name="phone"
+                    name="phoneNumber"
                     type="tel"
-                    value={formData.phone}
+                    value={formData.phoneNumber || ""}
                     onChange={handleChange}
                     disabled={!isEditing}
                     className="pl-10"
@@ -148,34 +165,29 @@ export function AdminProfile({ user }: AdminProfileProps) {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Buttons */}
             <div className="flex gap-3 pt-4">
               {!isEditing ? (
-                <Button onClick={() => setIsEditing(true)}className="bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg">
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  className="bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg"
+                >
                   Edit Profile
                 </Button>
               ) : (
                 <>
                   <Button
-  onClick={handleSave}
-  className="flex items-center gap-2 bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg"
->
-  <Save className="size-4" />
-  Save Changes
-</Button>
+                    onClick={handleSave}
+                    className="flex items-center gap-2 bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg"
+                  >
+                    <Save className="size-4" />
+                    Save Changes
+                  </Button>
 
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => {
                       setIsEditing(false);
-                      setFormData({
-                        name: user.name || "Admin User",
-                        email: user.email,
-                        phone: "+1 (555) 123-4567",
-                        department: "Public Transport Authority",
-                        role: "Senior Administrator",
-                        employeeId: "ADM-2024-001",
-                      });
                     }}
                   >
                     Cancel
