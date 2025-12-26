@@ -46,10 +46,34 @@ export function AdminProfile({ user }: AdminProfileProps) {
     });
   };
 
-  const handleSave = () => {
+ const handleSave = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      "https://noble-adventure-production.up.railway.app/api/admin/profile",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!res.ok) throw new Error("Failed");
+
+    const updated = await res.json();
+    setFormData(updated);
+
     setIsEditing(false);
     toast.success("Profile updated successfully");
-  };
+  } catch {
+    toast.error("Failed to update profile");
+  }
+};
+
 
   return (
     <div className="max-w-3xl mx-auto">

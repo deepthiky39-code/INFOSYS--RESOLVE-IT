@@ -140,6 +140,19 @@ public ResponseEntity<?> getAdminProfile(Authentication authentication) {
             adminManagementService.getAdminByEmail(authentication.getName())
     );
 }
+@PutMapping("/profile")
+public ResponseEntity<?> updateAdminProfile(
+        Authentication authentication,
+        @RequestBody Admin updatedData
+) {
+    String email = authentication.getName();
+
+    return ResponseEntity.ok(
+            adminManagementService.updateAdminProfile(email, updatedData)
+    );
+}
+
+
 }
 
 

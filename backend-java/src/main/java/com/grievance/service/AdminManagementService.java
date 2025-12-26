@@ -184,5 +184,16 @@ public class AdminManagementService {
     return adminRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Admin not found"));
 }
+public Admin updateAdminProfile(String email, Admin updatedData) {
+
+    Admin admin = adminRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+    admin.setName(updatedData.getName());
+    admin.setPhoneNumber(updatedData.getPhoneNumber());
+    admin.setDepartment(updatedData.getDepartment());
+
+    return adminRepository.save(admin);
+}
 
 }
