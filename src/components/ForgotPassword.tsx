@@ -13,12 +13,29 @@ export function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Password reset request for:", email);
-    // Add your forgot password logic here
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch(
+      `https://noble-adventure-production.up.railway.app/api/auth/forgot-password?email=${email}`,
+      {
+        method: "POST",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to send reset email");
+    }
+
+    console.log("RESET REQUEST SENT SUCCESSFULLY");
     setIsSubmitted(true);
-  };
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    alert("Failed to send reset email. Please try again.");
+  }
+};
+
 
   return (
     <Card className="w-full max-w-md">
