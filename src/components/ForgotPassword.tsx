@@ -18,14 +18,17 @@ export function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
 
   try {
     const res = await fetch(
-      `https://noble-adventure-production.up.railway.app/api/auth/forgot-password?email=${email}`,
+      `https://noble-adventure-production.up.railway.app/api/auth/forgot-password?email=${encodeURIComponent(email)}`,
       {
         method: "POST",
       }
     );
 
+    const data = await res.json().catch(() => null);
+
     if (!res.ok) {
-      throw new Error("Failed to send reset email");
+      alert(data?.message || "Email not found or invalid request");
+      throw new Error("Failed");
     }
 
     console.log("RESET REQUEST SENT SUCCESSFULLY");
@@ -35,6 +38,7 @@ export function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
     alert("Failed to send reset email. Please try again.");
   }
 };
+
 
 
   return (
