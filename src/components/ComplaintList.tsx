@@ -64,7 +64,7 @@ export function ComplaintList({ complaints }: ComplaintListProps) {
               setExpandedId(isExpanded ? null : c.id)
             }
           >
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-6 space-y-4 max-w-2xl mx-auto">
               {/* HEADER */}
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold">{c.title}</h3>

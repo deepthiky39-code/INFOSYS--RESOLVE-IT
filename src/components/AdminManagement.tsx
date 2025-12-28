@@ -152,15 +152,18 @@ export function AdminManagement() {
             </Button>
           </DialogTrigger>
 
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Administrator</DialogTitle>
-              <DialogDescription>
-                Add a new administrator to the system
-              </DialogDescription>
-            </DialogHeader>
+          <DialogContent className="bg-white max-w-xl rounded-2xl shadow-xl border p-6">
+  <DialogHeader>
+    <DialogTitle className="text-xl font-semibold">
+      Create New Administrator
+    </DialogTitle>
+    <DialogDescription>
+      Add a new administrator to the system
+    </DialogDescription>
+  </DialogHeader>
 
-            <div className="space-y-4 mt-4">
+  <div className="mt-3 space-y-4">
+
               <div>
                 <Label>Full Name</Label>
                 <Input

@@ -125,7 +125,7 @@ export function AdminComplaintList({
   return (
     <>
       {/* LIST */}
-      <div className="space-y-4">
+      <div className="space-y-4 max-w-2xl mx-auto w-full">
         {complaints.map((complaint) => (
           <Card
             key={complaint.id}

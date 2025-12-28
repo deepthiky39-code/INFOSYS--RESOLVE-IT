@@ -25,7 +25,7 @@ public class EmailService {
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text);
-            message.setFrom("noreply@grievance.com");
+message.setFrom("deepthiky39@gmail.com");
 
             mailSender.send(message);
 
