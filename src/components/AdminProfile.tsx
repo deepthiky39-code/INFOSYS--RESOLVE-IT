@@ -20,14 +20,11 @@ export function AdminProfile({ user }: AdminProfileProps) {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(
-      "https://noble-adventure-production.up.railway.app/api/admin/profile",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    fetch("https://noble-adventure-production.up.railway.app/api/admin/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) throw new Error("Failed");
         return res.json();
@@ -39,41 +36,42 @@ export function AdminProfile({ user }: AdminProfileProps) {
   if (!formData)
     return <p className="text-center">Loading profile...</p>;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
- const handleSave = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(
-      "https://noble-adventure-production.up.railway.app/api/admin/profile",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+      const res = await fetch(
+        "https://noble-adventure-production.up.railway.app/api/admin/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-    if (!res.ok) throw new Error("Failed");
+      if (!res.ok) throw new Error("Failed");
 
-    const updated = await res.json();
-    setFormData(updated);
+      const updated = await res.json();
+      setFormData(updated);
 
-    setIsEditing(false);
-    toast.success("Profile updated successfully");
-  } catch {
-    toast.error("Failed to update profile");
-  }
-};
-
+      setIsEditing(false);
+      toast.success("Profile updated successfully");
+    } catch {
+      toast.error("Failed to update profile");
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -86,7 +84,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {/* Profile Header */}
+          {/* HEADER */}
           <div className="flex items-center gap-6 pb-6 border-b">
             <div className="bg-red-600 p-6 rounded-full">
               <User className="size-12 text-white" />
@@ -101,9 +99,11 @@ export function AdminProfile({ user }: AdminProfileProps) {
             </div>
           </div>
 
-          {/* Profile Form */}
+          {/* FORM */}
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              {/* NAME */}
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">
@@ -119,6 +119,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
                 </div>
               </div>
 
+              {/* EMAIL */}
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <div className="relative">
@@ -135,6 +136,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
                 </div>
               </div>
 
+              {/* PHONE */}
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
                 <div className="relative">
@@ -151,32 +153,46 @@ export function AdminProfile({ user }: AdminProfileProps) {
                 </div>
               </div>
 
+              {/* DEPARTMENT DROPDOWN */}
               <div className="space-y-2">
                 <Label htmlFor="department">Department</Label>
-                <div className="relative">
-                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                  <Input
+                <div className="relative z-50">
+                  <select
                     id="department"
                     name="department"
-                    value={formData.department}
+                    value={formData.department || ""}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="pl-10"
-                  />
+                    className="w-full border rounded-md px-3 py-2 bg-white"
+                  >
+                    <option value="">Select Department</option>
+                    <option value="BUS_OPERATIONS">Bus Operations</option>
+                    <option value="TRAIN_OPERATIONS">Train Operations</option>
+                    <option value="METRO_OPERATIONS">Metro Operations</option>
+                  </select>
                 </div>
               </div>
 
+              {/* ROLE DROPDOWN */}
               <div className="space-y-2">
                 <Label htmlFor="role">Role</Label>
-                <Input
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  disabled
-                  className="bg-gray-50"
-                />
+                <div className="relative z-50">
+                  <select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    disabled
+                    className="w-full border rounded-md px-3 py-2 bg-gray-50"
+                  >
+                    <option value="ADMIN">Administrator</option>
+                    <option value="SENIOR_ADMIN">Senior Administrator</option>
+                    <option value="SUPERVISOR">Supervisor</option>
+                  </select>
+                </div>
               </div>
 
+              {/* EMPLOYEE ID */}
               <div className="space-y-2">
                 <Label htmlFor="employeeId">Employee ID</Label>
                 <Input
@@ -189,7 +205,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
               </div>
             </div>
 
-            {/* Buttons */}
+            {/* BUTTONS */}
             <div className="flex gap-3 pt-4">
               {!isEditing ? (
                 <Button
@@ -210,9 +226,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
 
                   <Button
                     variant="outline"
-                    onClick={() => {
-                      setIsEditing(false);
-                    }}
+                    onClick={() => setIsEditing(false)}
                   >
                     Cancel
                   </Button>
