@@ -21,9 +21,11 @@ public class FileStorageService {
                 Files.createDirectories(uploadDir);
             }
 
-String cleanName = file.getOriginalFilename().replaceAll("\\s+", "_");
-String fileName = UUID.randomUUID() + "_" + cleanName;
-            Path filePath = uploadDir.resolve(fileName);
+String cleanedName = file.getOriginalFilename()
+        .replaceAll("\\s+", "_");
+
+String fileName = UUID.randomUUID() + "_" + cleanedName;
+ Path filePath = uploadDir.resolve(fileName);
 
             Files.copy(file.getInputStream(), filePath);
 

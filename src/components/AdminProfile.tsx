@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { User, Mail, Phone, Building, Save } from "lucide-react";
@@ -33,8 +39,7 @@ export function AdminProfile({ user }: AdminProfileProps) {
       .catch(() => toast.error("Failed to load profile"));
   }, []);
 
-  if (!formData)
-    return <p className="text-center">Loading profile...</p>;
+  if (!formData) return <p className="text-center">Loading profile...</p>;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -102,106 +107,78 @@ export function AdminProfile({ user }: AdminProfileProps) {
           {/* FORM */}
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               {/* NAME */}
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="pl-10"
-                  />
-                </div>
+                <Label>Full Name</Label>
+                <Input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                />
               </div>
 
               {/* EMAIL */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="pl-10"
-                  />
-                </div>
+                <Label>Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                />
               </div>
 
               {/* PHONE */}
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
-                  <Input
-                    id="phone"
-                    name="phoneNumber"
-                    type="tel"
-                    value={formData.phoneNumber || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="pl-10"
-                  />
-                </div>
+                <Label>Phone Number</Label>
+                <Input
+                  name="phoneNumber"
+                  value={formData.phoneNumber || ""}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                />
               </div>
 
-              {/* DEPARTMENT DROPDOWN */}
+              {/* DEPARTMENT */}
               <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
-                <div className="relative z-50">
-                  <select
-                    id="department"
-                    name="department"
-                    value={formData.department || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="w-full border rounded-md px-3 py-2 bg-white"
-                  >
-                    <option value="">Select Department</option>
-                    <option value="BUS_OPERATIONS">Bus Operations</option>
-                    <option value="TRAIN_OPERATIONS">Train Operations</option>
-                    <option value="METRO_OPERATIONS">Metro Operations</option>
-                  </select>
-                </div>
+                <Label>Department</Label>
+                <select
+                  name="department"
+                  value={formData.department || ""}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                  className="w-full border rounded-md px-3 py-2 bg-white"
+                >
+                  <option value="">Select Department</option>
+                  <option value="BUS_OPERATIONS">Bus Operations</option>
+                  <option value="TRAIN_OPERATIONS">Train Operations</option>
+                  <option value="METRO_OPERATIONS">Metro Operations</option>
+                  <option value="ALL_OPERATIONS">All Operations</option>
+                </select>
               </div>
 
-              {/* ROLE DROPDOWN */}
+              {/* ROLE */}
               <div className="space-y-2">
-                <Label htmlFor="role">Role</Label>
-                <div className="relative z-50">
-                  <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    disabled
-                    className="w-full border rounded-md px-3 py-2 bg-gray-50"
-                  >
-                    <option value="ADMIN">Administrator</option>
-                    <option value="SENIOR_ADMIN">Senior Administrator</option>
-                    <option value="SUPERVISOR">Supervisor</option>
-                  </select>
-                </div>
+                <Label>Role</Label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                  className="w-full border rounded-md px-3 py-2 bg-white"
+                >
+                  <option value="ADMIN">Administrator</option>
+                  <option value="SENIOR_ADMIN">Senior Administrator</option>
+                  <option value="SUPERVISOR">Supervisor</option>
+                </select>
               </div>
 
               {/* EMPLOYEE ID */}
               <div className="space-y-2">
-                <Label htmlFor="employeeId">Employee ID</Label>
-                <Input
-                  id="employeeId"
-                  name="employeeId"
-                  value={formData.employeeId}
-                  disabled
-                  className="bg-gray-50"
-                />
+                <Label>Employee ID</Label>
+                <Input value={formData.employeeId} disabled />
               </div>
             </div>
 
@@ -210,17 +187,14 @@ export function AdminProfile({ user }: AdminProfileProps) {
               {!isEditing ? (
                 <Button
                   onClick={() => setIsEditing(true)}
-                  className="bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg"
+                  className="bg-black text-white"
                 >
                   Edit Profile
                 </Button>
               ) : (
                 <>
-                  <Button
-                    onClick={handleSave}
-                    className="flex items-center gap-2 bg-black text-white hover:bg-black/90 px-6 py-2 rounded-lg"
-                  >
-                    <Save className="size-4" />
+                  <Button onClick={handleSave} className="bg-black text-white">
+                    <Save className="size-4 mr-2" />
                     Save Changes
                   </Button>
 
