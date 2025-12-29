@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
@@ -88,24 +90,31 @@ public class ComplaintController {
         );
     }
 
-    @GetMapping("/photos/{fileName:.+}")
-    public ResponseEntity<Resource> getPhoto(@PathVariable String fileName) {
-        try {
-            Path filePath = fileStorageService.getFilePath(fileName);
-            Resource resource = new UrlResource(filePath.toUri());
+   @GetMapping("/photos/{fileName:.+}")
+public ResponseEntity<Resource> getPhoto(@PathVariable String fileName) {
+    try {
+        Path filePath = fileStorageService.getFilePath(fileName);
+        Resource resource = new UrlResource(filePath.toUri());
 
-            if (resource.exists() && resource.isReadable()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .header(
-                                HttpHeaders.CONTENT_DISPOSITION,
-                                "inline; filename=\"" + resource.getFilename() + "\""
-                        )
-                        .body(resource);
-            }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
+        if (!resource.exists() || !resource.isReadable()) {
             return ResponseEntity.notFound().build();
         }
+
+        // Detect correct content type
+        String contentType = Files.probeContentType(filePath);
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+
+    } catch (Exception e) {
+        return ResponseEntity.notFound().build();
     }
+}
+
 }
