@@ -90,9 +90,11 @@ public class ComplaintController {
         );
     }
 
-   @GetMapping("/photos/{fileName:.+}")
+  @GetMapping("/photos/{fileName:.+}")
 public ResponseEntity<Resource> getPhoto(@PathVariable String fileName) {
     try {
+        fileName = java.net.URLDecoder.decode(fileName, java.nio.charset.StandardCharsets.UTF_8);
+        
         Path filePath = fileStorageService.getFilePath(fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -100,11 +102,8 @@ public ResponseEntity<Resource> getPhoto(@PathVariable String fileName) {
             return ResponseEntity.notFound().build();
         }
 
-        // Detect correct content type
         String contentType = Files.probeContentType(filePath);
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
+        if (contentType == null) contentType = "application/octet-stream";
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -116,5 +115,6 @@ public ResponseEntity<Resource> getPhoto(@PathVariable String fileName) {
         return ResponseEntity.notFound().build();
     }
 }
+
 
 }
