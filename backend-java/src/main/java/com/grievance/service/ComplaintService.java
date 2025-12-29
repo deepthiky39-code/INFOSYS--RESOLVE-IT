@@ -169,9 +169,11 @@ public List<ComplaintResponse> getComplaintsForAdmin(String adminEmail) {
         .findByComplaintId(complaint.getId())
         .stream()
         .map(photo ->
-            "https://noble-adventure-production.up.railway.app/uploads/complaints/"
-            + photo.getFilePath())
+    "https://noble-adventure-production.up.railway.app/api/complaints/photos/"
+    + photo.getFilePath()
+)
         .toList();
+
 
 
         ComplaintResponse response = new ComplaintResponse();
